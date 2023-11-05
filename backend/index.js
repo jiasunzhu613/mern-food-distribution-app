@@ -2,6 +2,7 @@ import express from "express";
 import {PORT, mongoDBURL} from "./config.js";
 import mongoose from "mongoose";
 
+// making random comment lmfao
 const app = express();
 
 app.get('/', (request, response) => {
