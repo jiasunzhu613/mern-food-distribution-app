@@ -3,7 +3,8 @@ import {PORT, mongoDBURL} from "./config.js";
 import mongoose from "mongoose";
 import {Event} from "./models/eventModel.js";
 import {User} from "./models/userModel.js";
-
+import * as fs from "fs";
+import * as path from "path";
 
 const app = express();
 
@@ -52,7 +53,7 @@ app.post('/user', async (request, response) => {
         //TODO: set default values for icon and activity when inputs are not given!
         const newUser = {
             name: request.body.name,
-            icon: request.body.icon,
+            icon: fs.readFileSync(request.body.icon, {encoding:"base64", flag:"r"}),
             activity: request.body.activity
         };
         const user = await User.create(newUser); // Use object literal to create new user using model
