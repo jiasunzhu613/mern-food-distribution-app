@@ -8,18 +8,18 @@ Info that will be needed to create an event:
 - Items being distributed (type)
  */
 const eventSchema = new Schema({
-    Date: { // range of dates more preferable?
-        type: Date, // need to post process
+    date: { // range of dates more preferable?
+        type: Date, // TODO: need to post process
         required: true
     },
-    Location: {
-        type: String, // need to post process
+    location: {
+        type: String, // TODO: need to post process
         required: true
     },
-    ItemTypes:{
+    itemTypes:{
         type: [String],
         required: true
     }
 });
 
-export const event = mongoose.model('Event', eventSchema);
+export const Event = mongoose.model('Event', eventSchema);
