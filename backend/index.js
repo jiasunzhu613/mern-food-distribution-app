@@ -57,8 +57,8 @@ app.get('/event', async (request, response) => {
 // Get event by id
 app.get('/event/:id', async (request, response) => {
     try{
-        const id = request.params.id;
-        const event = await Event.findById(id);
+        const id = request.params.id; // Gets id field from "/event/:id"
+        const event = await Event.findById(id); // Finding event using id
         return response.status(200).json(event);
     }catch(error){
         console.log(error.message);
@@ -163,13 +163,14 @@ app.put('/user/:id', async (request, response) => {
                 message: `Send all required fields: name, icon`// function to find all types required?
             });
         }
-        const id = request.params.id;
+        const id = request.params.id; // getting id from the parameters
+        //Creating update object literal
         const update = {
             name: request.body.name,
             icon: fs.readFileSync(request.body.icon, {encoding:"base64", flag:"r"}),
             activity: request.body.activity
         };
-        const result = await User.findByIdAndUpdate(id, update);
+        const result = await User.findByIdAndUpdate(id, update); // uses the object literal to update the values present with the id
 
         if (!result){
             return response.status(404).json({message : 'User not found'});
