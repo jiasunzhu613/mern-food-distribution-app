@@ -5,7 +5,7 @@ import fs from "fs";
 const router = express.Router();
 
 // Post users
-router.post('/user', async (request, response) => {
+router.post('', async (request, response) => {
     try {
         //TODO: Hmmm prolly only needs name tbf
         if (!request.body.name || !request.body.icon || !request.body.activity){
@@ -30,7 +30,7 @@ router.post('/user', async (request, response) => {
 });
 
 // Get all users
-router.get('/user', async (request, response) => {
+router.get('', async (request, response) => {
     try{
         const users = await User.find({});
         return response.status(200).json({
@@ -44,7 +44,7 @@ router.get('/user', async (request, response) => {
 });
 
 // Get user by id
-router.get('/user/:id', async (request, response) => {
+router.get('/:id', async (request, response) => {
     try{
         const id = request.params.id;
         const user = await User.findById(id);
@@ -56,7 +56,7 @@ router.get('/user/:id', async (request, response) => {
 });
 
 // Update user
-router.put('/user/:id', async (request, response) => {
+router.put('/:id', async (request, response) => {
     try{
         if (!request.body.name || !request.body.icon){
             return response.status(400).send({
@@ -83,7 +83,7 @@ router.put('/user/:id', async (request, response) => {
 });
 
 //Delete user
-router.delete('/user/:id', async (request, response) => {
+router.delete('/:id', async (request, response) => {
     try{
         const id = request.params.id;
         const result = await User.findOneAndDelete(id);

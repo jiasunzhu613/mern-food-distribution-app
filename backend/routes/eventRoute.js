@@ -4,7 +4,7 @@ import {Event} from "../models/eventModel.js";
 const router = express.Router();
 
 // Post events
-router.post('/event', async (request, response) => {
+router.post('', async (request, response) => {
     try {
         if (!request.body.date || !request.body.location || !request.body.itemTypes){
             return response.status(400).send({
@@ -27,7 +27,7 @@ router.post('/event', async (request, response) => {
 });
 
 // Get all events
-router.get('/event', async (request, response) => {
+router.get('', async (request, response) => {
     try{
         const events = await Event.find({});
         return response.status(200).json({
@@ -41,7 +41,7 @@ router.get('/event', async (request, response) => {
 });
 
 // Get event by id
-router.get('/event/:id', async (request, response) => {
+router.get('/:id', async (request, response) => {
     try{
         const id = request.params.id; // Gets id field from "/event/:id"
         const event = await Event.findById(id); // Finding event using id
@@ -53,7 +53,7 @@ router.get('/event/:id', async (request, response) => {
 });
 
 // Update event
-router.put('/event/:id', async (request, response) => {
+router.put('/:id', async (request, response) => {
     try{
         if (!request.body.date || !request.body.location || !request.body.itemTypes){
             return response.status(400).send({
@@ -74,7 +74,7 @@ router.put('/event/:id', async (request, response) => {
 });
 
 //Delete event
-router.delete('/event/:id', async (request, response) => {
+router.delete('/:id', async (request, response) => {
     try{
         const id = request.params.id;
         const result = await Event.findOneAndDelete(id);
