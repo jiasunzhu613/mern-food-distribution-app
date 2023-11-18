@@ -7,12 +7,12 @@ const userSchema = new Schema({
         required: [true, "Please add a name"]
     },
     email: { //a sign up email
-        type: [String],
+        type: String,
         required: [true, "Please add an email"],
         unique: true
     },
     password: {
-        type: [String],
+        type: String,
         required: [true, "Please create a password"]
     },
     icon: { // Retrieved: https://www.geeksforgeeks.org/upload-and-retrieve-image-on-mongodb-using-mongoose/
