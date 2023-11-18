@@ -1,6 +1,8 @@
 import express from "express";
 import {User} from "../models/userModel.js";
 import fs from "fs";
+import jsonwebtoken from "jsonwebtoken"
+import bcrypt from "bcryptjs"
 
 const router = express.Router();
 
@@ -8,9 +10,9 @@ const router = express.Router();
 router.post('', async (request, response) => {
     try {
         //TODO: Hmmm prolly only needs name tbf
-        if (!request.body.name || !request.body.icon || !request.body.activity){
+        if (!request.body.name || !request.body.email || !request.body.password || !request.body.icon || !request.body.activity){
             return response.status(400).send({
-                message: `Send all required fields: name, icon, activity`// function to find all types required?
+                message: `Send all required fields: name, email, password, icon, activity`// function to find all types required?
             });
         }
 
@@ -18,6 +20,8 @@ router.post('', async (request, response) => {
         //TODO: set default values for icon and activity when inputs are not given!
         const newUser = {
             name: request.body.name,
+            email: request.body.email,
+            password: request.body.password,
             icon: fs.readFileSync(request.body.icon, {encoding:"base64", flag:"r"}),
             activity: request.body.activity
         };
