@@ -1,32 +1,26 @@
 import express from "express";
 import {User} from "../models/userModel.js";
 import fs from "fs";
-import jsonwebtoken from "jsonwebtoken"
-import bcrypt from "bcryptjs"
+import jsonwebtoken from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 
 const router = express.Router();
 
 // Post users
 router.post('', async (request, response) => {
     try {
-        //TODO: Hmmm prolly only needs name tbf
-        if (!request.body.name || !request.body.email || !request.body.password || !request.body.icon || !request.body.activity){
-            return response.status(400).send({
-                message: `Send all required fields: name, email, password, icon, activity`// function to find all types required?
-            });
-        }
-
         // Create object literal
         //TODO: set default values for icon and activity when inputs are not given!
         const newUser = {
-            name: request.body.name,
+            firstName: request.body.firstName,
+            lastName: request.body.lastName,
             email: request.body.email,
             password: request.body.password,
             icon: fs.readFileSync(request.body.icon, {encoding:"base64", flag:"r"}),
-            activity: request.body.activity
+            activity: 1
         };
         const user = await User.create(newUser); // Use object literal to create new user using model
-        return response.status(201).send(user);
+        return response.status(201).json(user._id);
     }catch (error){
         console.log(error.message);
         response.status(500).send({message: error.message});
@@ -60,17 +54,16 @@ router.get('/:id', async (request, response) => {
 });
 
 // Update user
+//TODO: need to revisit this function
 router.put('/:id', async (request, response) => {
     try{
-        if (!request.body.name || !request.body.icon){
-            return response.status(400).send({
-                message: `Send all required fields: name, icon`// function to find all types required?
-            });
-        }
         const id = request.params.id; // getting id from the parameters
         //Creating update object literal
         const update = {
-            name: request.body.name,
+            firstName: request.body.firstName,
+            lastName: request.body.lastName,
+            email: request.body.email,
+            password: request.body.password,
             icon: fs.readFileSync(request.body.icon, {encoding:"base64", flag:"r"}),
             activity: request.body.activity
         };

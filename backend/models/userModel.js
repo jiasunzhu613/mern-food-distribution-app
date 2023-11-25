@@ -2,16 +2,20 @@ import mongoose from "mongoose";
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
-    name: { // range of dates more preferable?
-        type: [String], // format: [first, last]  TODO: need to post process
-        required: [true, "Please add a name"]
+    firstName: {
+        type: String,
+        required: [true, "Please add a first name"]
+    },
+    lastName: {
+        type: String,
+        required: [true, "Please add a last name"]
     },
     email: { //a sign up email
         type: String,
         required: [true, "Please add an email"],
         unique: true
     },
-    password: {
+    password: { // TODO: needs hashing
         type: String,
         required: [true, "Please create a password"]
     },

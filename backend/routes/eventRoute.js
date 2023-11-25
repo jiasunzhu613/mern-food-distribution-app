@@ -6,12 +6,6 @@ const router = express.Router();
 // Post events
 router.post('', async (request, response) => {
     try {
-        if (!request.body.date || !request.body.location || !request.body.itemTypes){
-            return response.status(400).send({
-                message: `Send all required fields: date, location, itemTypes`// function to find all types required?
-            });
-        }
-
         // Create object literal
         const newEvent = {
             date: request.body.date,
@@ -19,7 +13,7 @@ router.post('', async (request, response) => {
             itemTypes: request.body.itemTypes
         };
         const event = await Event.create(newEvent); // Use object literal to create new event using model
-        return response.status(201).send(event);
+        return response.status(201).send(event._id);
     }catch (error){
         console.log(error.message);
         response.status(500).send({message: error.message});
@@ -55,11 +49,6 @@ router.get('/:id', async (request, response) => {
 // Update event
 router.put('/:id', async (request, response) => {
     try{
-        if (!request.body.date || !request.body.location || !request.body.itemTypes){
-            return response.status(400).send({
-                message: `Send all required fields: date, location, itemTypes`// function to find all types required?
-            });
-        }
         const id = request.params.id;
         const result = await Event.findByIdAndUpdate(id, request.body);
 
