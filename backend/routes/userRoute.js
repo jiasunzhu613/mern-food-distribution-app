@@ -2,30 +2,42 @@ import express from "express";
 import {User} from "../models/userModel.js";
 import fs from "fs";
 import jsonwebtoken from "jsonwebtoken";
-import bcrypt from "bcryptjs";
-import { minidenticon } from 'minidenticons'
+import bcrypt from 'bcryptjs';
 
 const router = express.Router();
-const SATURATION = 50;
-const LIGHTNESS = 50;
 
 // Post users
-// TODO: look into using identicons for when user does not enter an initial profile image
-// https://github.com/laurentpayot/minidenticons
 router.post('', async (request, response) => {
     try {
         // Create object literal
         //TODO: set default values for icon and activity when inputs are not given!
+        const salt = await bcrypt.genSalt(10)
+        const hashedPassword = await bcrypt.hash(request.body.password, salt)
+        console.log(hashedPassword)
+        
         const newUser = {
             firstName: request.body.firstName,
             lastName: request.body.lastName,
             email: request.body.email,
-            password: request.body.password,
-            icon: minidenticon(request.firstName + " " + request.lastName, SATURATION, LIGHTNESS),
+            password: hashedPassword,
+            icon: fs.readFileSync(request.body.icon, {encoding:"base64", flag:"r"}),
             activity: 1
         };
+
+        const userExists = await User.findOne({email: request.body.email})
+        
+        if(userExists) {
+            response.status(400)
+            throw new Error('User already exists')
+        }
+
         const user = await User.create(newUser); // Use object literal to create new user using model
-        return response.status(201).json(user._id);
+        return response.status(201).json({
+            _id: user._id,
+            firstname: user.firstName,
+            lastname: user.lastName,
+            email: user.email
+        });
     }catch (error){
         console.log(error.message);
         response.status(500).send({message: error.message});
@@ -69,14 +81,9 @@ router.put('/:id', async (request, response) => {
             lastName: request.body.lastName,
             email: request.body.email,
             password: request.body.password,
-            icon: minidenticon(request.firstName + " " + request.lastName, SATURATION, LIGHTNESS),
+            icon: fs.readFileSync(request.body.icon, {encoding:"base64", flag:"r"}),
             activity: request.body.activity
         };
-
-        if (request.icon){
-            update.icon = fs.readFileSync(request.body.icon, {encoding:"base64", flag:"r"});
-        }
-
         const result = await User.findByIdAndUpdate(id, update); // uses the object literal to update the values present with the id
 
         if (!result){
