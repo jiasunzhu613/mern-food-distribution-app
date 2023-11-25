@@ -27,8 +27,7 @@ router.post('', async (request, response) => {
         const userExists = await User.findOne({email: request.body.email})
         
         if(userExists) {
-            response.status(400)
-            throw new Error('User already exists')
+            response.status(400).send({message: 'User already exists'}) 
         }
 
         const user = await User.create(newUser); // Use object literal to create new user using model
