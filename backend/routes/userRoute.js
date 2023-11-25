@@ -3,8 +3,11 @@ import {User} from "../models/userModel.js";
 import fs from "fs";
 import jsonwebtoken from "jsonwebtoken";
 import bcrypt from 'bcryptjs';
+import { minidenticon } from 'minidenticons'
 
 const router = express.Router();
+const SATURATION = 50;
+const LIGHTNESS = 50;
 
 // Post users
 router.post('', async (request, response) => {
@@ -20,7 +23,7 @@ router.post('', async (request, response) => {
             lastName: request.body.lastName,
             email: request.body.email,
             password: hashedPassword,
-            icon: fs.readFileSync(request.body.icon, {encoding:"base64", flag:"r"}),
+            icon: minidenticon(request.firstName + " " + request.lastName, SATURATION, LIGHTNESS),
             activity: 1
         };
 
@@ -34,8 +37,8 @@ router.post('', async (request, response) => {
         const user = await User.create(newUser); // Use object literal to create new user using model
         return response.status(201).json({
             _id: user._id,
-            firstname: user.firstName,
-            lastname: user.lastName,
+            firstName: user.firstName,
+            lastName: user.lastName,
             email: user.email
         });
     }catch (error){
@@ -81,9 +84,13 @@ router.put('/:id', async (request, response) => {
             lastName: request.body.lastName,
             email: request.body.email,
             password: request.body.password,
-            icon: fs.readFileSync(request.body.icon, {encoding:"base64", flag:"r"}),
+            icon: minidenticon(request.firstName + " " + request.lastName, SATURATION, LIGHTNESS),
             activity: request.body.activity
         };
+
+        if (request.icon){
+            update.icon = fs.readFileSync(request.body.icon, {encoding:"base64", flag:"r"});
+        }
         const result = await User.findByIdAndUpdate(id, update); // uses the object literal to update the values present with the id
 
         if (!result){
