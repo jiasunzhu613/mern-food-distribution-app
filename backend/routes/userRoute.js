@@ -14,16 +14,16 @@ router.post('', async (request, response) => {
     try {
         // Create object literal
         //TODO: set default values for icon and activity when inputs are not given!
-        const salt = await bcrypt.genSalt(10)
-        const hashedPassword = await bcrypt.hash(request.body.password, salt)
-        console.log(hashedPassword)
-        
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(request.body.password, salt);
+        console.log(hashedPassword);
+        console.log(request.body.firstName + request.body.lastName);
         const newUser = {
             firstName: request.body.firstName,
             lastName: request.body.lastName,
             email: request.body.email,
             password: hashedPassword,
-            icon: minidenticon(request.firstName + " " + request.lastName, SATURATION, LIGHTNESS),
+            icon: minidenticon(request.body.firstName + request.body.lastName, SATURATION, LIGHTNESS), // use email?
             activity: 1
         };
 
