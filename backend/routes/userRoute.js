@@ -9,8 +9,8 @@ const router = express.Router();
 const SATURATION = 50;
 const LIGHTNESS = 50;
 
-// Post users
-router.post('', async (request, response) => {
+// Register users
+router.post('/register', async (request, response) => {
     try {
         // Create object literal
         //TODO: set default values for icon and activity when inputs are not given!
