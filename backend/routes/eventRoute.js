@@ -6,13 +6,7 @@ const router = express.Router();
 // Post events
 router.post('', async (request, response) => {
     try {
-        // Create object literal
-        const newEvent = {
-            date: request.body.date,
-            location: request.body.location,
-            itemTypes: request.body.itemTypes
-        };
-        const event = await Event.create(newEvent); // Use object literal to create new event using model
+        const event = await Event.create(request.body); // request.body contains json data
         return response.status(201).send(event._id);
     }catch (error){
         console.log(error.message);

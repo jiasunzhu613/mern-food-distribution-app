@@ -8,22 +8,25 @@ Info that will be needed to create an event:
 - Items being distributed (type)
  */
 const eventSchema = new Schema({
-    user: { //which user the event was created by
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref: 'User',
+    user: { //which user the event was created by (just put name when actually using model)
+        type: String,
+        required: true
     },
     date: { // range of dates more preferable?
         type: Date, // TODO: need to post process
         required: true
     },
-    location: {
-        type: String, // TODO: need to post process
+    lat: {
+        type: Number,
+        required: true
+    },
+    long: {
+        type: Number,
         required: true
     },
     itemTypes:{
         type: [String],
-        required: true
+        validate: v => Array.isArray(v) && v.length > 0
     }
 },
 {
