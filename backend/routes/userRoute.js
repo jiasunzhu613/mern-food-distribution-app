@@ -9,21 +9,21 @@ const router = express.Router();
 const SATURATION = 50;
 const LIGHTNESS = 50;
 
-// Register users
+// Post users
 router.post('/register', async (request, response) => {
     try {
         // Create object literal
         //TODO: set default values for icon and activity when inputs are not given!
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(request.body.password, salt);
-        console.log(hashedPassword);
-        console.log(request.body.firstName + request.body.lastName);
+        const salt = await bcrypt.genSalt(10)
+        const hashedPassword = await bcrypt.hash(request.body.password, salt)
+        console.log(hashedPassword)
+        
         const newUser = {
             firstName: request.body.firstName,
             lastName: request.body.lastName,
             email: request.body.email,
             password: hashedPassword,
-            icon: minidenticon(request.body.firstName + request.body.lastName, SATURATION, LIGHTNESS), // use email?
+            icon: minidenticon(request.firstName + " " + request.lastName, SATURATION, LIGHTNESS),
             activity: 1
         };
 
@@ -38,8 +38,37 @@ router.post('/register', async (request, response) => {
             _id: user._id,
             firstName: user.firstName,
             lastName: user.lastName,
-            email: user.email
+            email: user.email,
+            icon: user.icon
         });
+    }catch (error){
+        console.log(error.message);
+        response.status(500).send({message: error.message});
+    }
+});
+
+//Login user (POST)
+router.post('/login', async (request, response) => {
+    try {
+        //Check for user email
+        const login = {
+            email: request.body.email,
+            password: request.body.password
+        }
+        const user = await User.findOne({email: request.body.email})
+
+        //Compare entered password to decrypted password
+        if(user && (await bcrypt.compare(request.body.password, user.password))) {
+            response.status(200).send({message: "Successfully logged in"})
+            //Login successfull
+            return response.json({
+                _id: user._id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                icon: user.icon
+            })
+        } 
     }catch (error){
         console.log(error.message);
         response.status(500).send({message: error.message});
