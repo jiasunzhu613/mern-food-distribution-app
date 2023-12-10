@@ -3,11 +3,18 @@ import {PORT, mongoDBURL} from "./config.js";
 import mongoose from "mongoose";
 import eventRoute from "./routes/eventRoute.js";
 import userRoute from "./routes/userRoute.js";
+import cors from "cors";
 
 const app = express();
 
 // Allow express to parse JSON
 app.use(express.json());
+
+app.use(cors({
+    origin: "https://localhost:5555",
+    method: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type"]
+}));
 
 app.get('/', (request, response) => {
     console.log(request)
