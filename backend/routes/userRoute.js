@@ -31,16 +31,16 @@ router.post('/register', async (request, response) => {
         
         if(userExists) {
             response.status(400).send({message: 'User already exists'}) 
+        } else {
+            const user = await User.create(newUser); // Use object literal to create new user using model
+            return response.status(201).json({
+                _id: user._id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                icon: user.icon
+            });
         }
-
-        const user = await User.create(newUser); // Use object literal to create new user using model
-        return response.status(201).json({
-            _id: user._id,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            icon: user.icon
-        });
     }catch (error){
         console.log(error.message);
         response.status(500).send({message: error.message});
@@ -59,7 +59,6 @@ router.post('/login', async (request, response) => {
 
         //Compare entered password to decrypted password
         if(user && (await bcrypt.compare(request.body.password, user.password))) {
-            response.status(200).send({message: "Successfully logged in"})
             //Login successfull
             return response.json({
                 _id: user._id,
