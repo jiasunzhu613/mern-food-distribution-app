@@ -1,0 +1,15 @@
+.nav {
+    position: fixed;
+    width: 100%;
+    overflow: hidden;
+}
+
+.nav a{
+    display: block;
+    padding: 14px 16px;
+    float: right;
+}
+
+.profileImg {
+    border-radius: 100%;
+}

@@ -1,4 +1,6 @@
 import React from "react";
+import NavBar from "../NavBar/navBar.jsx";
+import MarkerPopUp from "../MarkerPopUp/MarkerPopUp.jsx";
 
 
 const Recipient = () => {
