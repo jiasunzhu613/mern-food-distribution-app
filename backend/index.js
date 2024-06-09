@@ -11,10 +11,12 @@ const app = express();
 app.use(express.json());
 
 app.use(cors({
-    origin: "https://localhost:5555",
+    origin: ["https://localhost:5555", "http://localhost:5173"],
     method: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type"]
 }));
+
+// app.use(cors());
 
 app.get('/', (request, response) => {
     console.log(request)
