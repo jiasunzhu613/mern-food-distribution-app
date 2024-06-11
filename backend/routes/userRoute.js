@@ -105,12 +105,18 @@ router.get('/:id', async (request, response) => {
 router.put('/:id', async (request, response) => {
     try{
         const id = request.params.id; // getting id from the parameters
+
+        //hash pw
+        const salt = await bcrypt.genSalt(10)
+        const hashedPassword = await bcrypt.hash(request.body.password, salt)
+        console.log(hashedPassword)
+
         //Creating update object literal
         const update = {
             firstName: request.body.firstName,
             lastName: request.body.lastName,
             email: request.body.email,
-            password: request.body.password,
+            password: hashedPassword,
             icon: minidenticon(request.firstName + " " + request.lastName, SATURATION, LIGHTNESS),
             activity: request.body.activity
         };
@@ -141,6 +147,20 @@ router.delete('/:id', async (request, response) => {
         }
         return response.status(200).json({message : 'User deleted successfully'});
     }catch(error){
+        console.log(error.message);
+        response.status(500).send({message: error.message});
+    }
+});
+
+router.delete('', async (request, response) => {
+    try {
+        const result = await User.deleteMany({});
+        if (!result){
+            return response.status(404).json({message: "Deletion not successful"});
+        }
+        return response.status(200).json({message: "Deleted " + result.deletedCount + " doocuments"});
+
+    } catch (error) {
         console.log(error.message);
         response.status(500).send({message: error.message});
     }

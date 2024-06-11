@@ -1,5 +1,6 @@
 import express from "express"
 import {Event} from "../models/eventModel.js";
+import {User} from "../models/userModel.js";
 
 const router = express.Router();
 
@@ -67,6 +68,20 @@ router.delete('/:id', async (request, response) => {
         }
         return response.status(200).json({message : 'Event deleted successfully'});
     }catch(error){
+        console.log(error.message);
+        response.status(500).send({message: error.message});
+    }
+});
+
+router.delete('', async (request, response) => {
+    try {
+        const result = await Event.deleteMany({});
+        if (!result){
+            return response.status(404).json({message: "Deletion not successful"});
+        }
+        return response.status(200).json({message: "Deleted " + result.deletedCount + " doocuments"});
+
+    } catch (error) {
         console.log(error.message);
         response.status(500).send({message: error.message});
     }
