@@ -47,7 +47,7 @@ router.post('/register', async (request, response) => {
     }
 });
 
-//Login user (POST)
+//Login user (GET)
 router.post('/login', async (request, response) => {
     try {
         //Check for user email
@@ -56,18 +56,15 @@ router.post('/login', async (request, response) => {
             password: request.body.password
         }
         const user = await User.findOne({email: request.body.email})
-
         //Compare entered password to decrypted password
         if(user && (await bcrypt.compare(request.body.password, user.password))) {
             //Login successfull
-            return response.json({
-                _id: user._id,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                email: user.email,
-                icon: user.icon
-            })
-        } 
+            console.log("reached1")
+
+            return response.json("success");
+        }
+        console.log("reached2")
+        return response.json("failed");
     }catch (error){
         console.log(error.message);
         response.status(500).send({message: error.message});

@@ -1,12 +1,15 @@
 import React from "react";
+import PropTypes from "prop-types";
 
-
-const Home = () => {
+const Home = (props) => {
     return (
         <div>
-            home
+           hi {props.user}
         </div>
     )
 }
 
+Home.prototype = {
+    user: PropTypes.string
+}
 export default Home
