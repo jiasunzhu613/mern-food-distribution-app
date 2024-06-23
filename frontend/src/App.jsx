@@ -8,13 +8,13 @@ import Register from "./pages/Register.jsx";
 
 
 function App() {
-    const [user, setUser] = useState();
-    async function login(u = null) {
+    const [user, setUser] = useState("");
+    async function login(u = "") {
         setUser(u)
     }
 
     async function logout() {
-        setUser(null)
+        setUser("")
     }
 
 

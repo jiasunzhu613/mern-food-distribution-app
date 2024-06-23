@@ -34,7 +34,7 @@ function Login(props){
             .then(d => {
                 if (d.data === 'success') {
                     props.login(email);
-                    navigate("/");
+                    navigate("/donor");
                 } else{
                     alert("INCORRECT EMAIL OR PASSWORD")
                 }

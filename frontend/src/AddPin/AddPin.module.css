@@ -1,0 +1,26 @@
+.container {
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
+    z-index: 2;
+    overflow: hidden;
+}
+
+.container .cButton{
+    cursor: pointer;
+    background-color: blue;
+    border-radius: 50%;
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
+}
+
+.container .cIcon{
+    scale:150%;
+    display: block;
+    padding: 14px 14px;
+}
+
+/*.profileImg {*/
+/*    border-radius: 100%;*/
+/*}*/

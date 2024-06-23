@@ -61,8 +61,9 @@ router.put('/:id', async (request, response) => {
 router.delete('/:id', async (request, response) => {
     try{
         const id = request.params.id;
-        const result = await Event.findOneAndDelete(id);
+        const result = await Event.findOneAndDelete({_id:id});
 
+        console.log(id.data);
         if (!result){
             return response.status(404).json({message : 'Event not found'});
         }

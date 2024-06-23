@@ -1,11 +1,15 @@
 import React from "react";
 import PropTypes from "prop-types";
+import AddPin from "../AddPin/AddPin.jsx";
+import AddInfo from "../AddInfo/addInfo.jsx";
 
 const Home = (props) => {
     return (
-        <div>
-           hi {props.user}
-        </div>
+        <AddInfo></AddInfo>
+        // <AddPin></AddPin>
+        // <div>
+        //    hi {props.user}
+        // </div>
     )
 }
 
