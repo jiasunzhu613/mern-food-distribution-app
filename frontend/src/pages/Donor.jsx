@@ -8,11 +8,11 @@ import PropTypes from "prop-types";
 function Donor(props) {
     const [showPopup, setShowPopup] = useState({});
     const [pins, setPins] = useState([]);
-    const [wantToAddPin, setWantToAddPin] = useState(true);
+    const [wantToAddPin, setWantToAddPin] = useState(false);
 
     useEffect(() => {
         loadPins();
-        });
+        }, []);
 
     function wantsToAddPin(w = false){
         setWantToAddPin(w);
@@ -35,19 +35,19 @@ function Donor(props) {
             itemTypes: [""]})
             .then((res) => {
                 setWantToAddPin(false);
+                loadPins();
                 console.log(res)
-            }).catch((err) => console.log(err));
-        // loadPins();
-    }
+            }).catch((err) => console.log(err));}
 
     function deletePin(id){
         axios.delete(`http://localhost:5555/event/${id}`)
-            .then((res) => console.log(res))
+            .then((res) => {
+                loadPins();
+                console.log(res)
+            })
             .catch((err) => console.log(err));
-        // loadPins();
     }
 
-    // console.log(pins.map((p) => console.log(p._id)))
     return (
         props.user !== "" ?
         <>
@@ -82,7 +82,7 @@ function Donor(props) {
                                                closeButton={true}
                                                onClose={() => setShowPopup(false)}>
                                             <div>You are here</div>
-                                            <button onClick={() => {console.log(p._id); deletePin(p._id)}}>{p._id}</button>
+                                            <button onClick={() => deletePin(p._id)}>{p._id}</button>
                                         </Popup>
                                     )
                                 }
