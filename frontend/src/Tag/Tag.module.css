@@ -1,0 +1,20 @@
+.container {
+    display: flex;
+}
+
+.button {
+    display: inline-block;
+    background-color: rgba(0, 0,255, 1);
+    border-radius: 2em;
+    margin-right:0.2em;
+}
+
+.disabled {
+    opacity: 0.3;
+}
+
+.tag {
+    font-size: 1em;
+    margin: 0.5em 0.7em;
+    color: antiquewhite;
+}

@@ -1,14 +1,17 @@
 import React, {useState, useEffect}  from 'react';
 import Map, {Marker, Popup} from 'react-map-gl';
-import NavBar from "../NavBar/navBar.jsx";
+import NavBar from "../NavBar/NavBar.jsx";
 import AddPin from "../AddPin/AddPin.jsx";
 import axios from "axios";
 import PropTypes from "prop-types";
+import AddInfo from "../AddInfo/AddInfo.jsx";
 
 function Donor(props) {
     const [showPopup, setShowPopup] = useState({});
     const [pins, setPins] = useState([]);
     const [wantToAddPin, setWantToAddPin] = useState(false);
+    const [showAddInfo, setShowAddInfo] = useState(false);
+    const [lngLat, setLnglat] = useState([]);
 
     useEffect(() => {
         loadPins();
@@ -18,6 +21,10 @@ function Donor(props) {
         setWantToAddPin(w);
     }
 
+    function toggleAddInfo(boo = false) {
+        setShowAddInfo(boo);
+    }
+
     // Axios requests
     function loadPins(){
         axios.get("http://localhost:5555/event")
@@ -25,14 +32,14 @@ function Donor(props) {
             .catch(err => console.log(err));
     }
 
-    function addPin(lngLat){
+    function addPin(lngLat, date, items){
         console.log(lngLat);
         axios.post("http://localhost:5555/event", {
             user: props.user,
             lat: lngLat.lat,
             long: lngLat.lng,
-            date: 1,
-            itemTypes: [""]})
+            date: date,
+            itemTypes: items})
             .then((res) => {
                 setWantToAddPin(false);
                 loadPins();
@@ -51,10 +58,13 @@ function Donor(props) {
     return (
         props.user !== "" ?
         <>
+            {showAddInfo ?
+            <AddInfo lngLat={lngLat} addPin={addPin} setShowAddInfo={toggleAddInfo}></AddInfo> : <></>}
             <Map
                 onClick={(e) => {
                     if (wantToAddPin){
-                        addPin(e.lngLat)
+                        setShowAddInfo(true);
+                        setLnglat(e.lngLat);
                     }
                 }}
                 mapboxAccessToken={process.env.REACT_APP_MAPBOX}

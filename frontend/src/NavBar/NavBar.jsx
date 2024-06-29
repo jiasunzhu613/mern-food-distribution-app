@@ -1,4 +1,4 @@
-import styles from "./navBar.module.css";
+import styles from "./NavBar.module.css";
 import profileImg from "../assets/react.svg";
 
 

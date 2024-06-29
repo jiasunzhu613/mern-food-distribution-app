@@ -48,7 +48,7 @@ router.put('/:id', async (request, response) => {
         const result = await Event.findByIdAndUpdate(id, request.body);
 
         if (!result){
-            return response.status(404).json({message : 'EEvent not found'});
+            return response.status(404).json({message : 'Event not found'});
         }
         return response.status(200).json({message : 'Event updated successfully'});
     }catch(error){
