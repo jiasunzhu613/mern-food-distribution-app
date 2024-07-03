@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import {Routes, Route} from "react-router-dom";
 import Home from "./pages/Home.jsx";
 import Donor from "./pages/Donor.jsx";
@@ -9,12 +9,21 @@ import Register from "./pages/Register.jsx";
 
 function App() {
     const [user, setUser] = useState("");
+
+    useEffect(() => {
+        if (localStorage.getItem("login") !== null){
+            setUser(localStorage.getItem("login"))
+        }
+    }, [])
+
     async function login(u = "") {
         setUser(u)
+        localStorage.setItem("login", u)
     }
 
     async function logout() {
         setUser("")
+        localStorage.removeItem("login")
     }
 
 

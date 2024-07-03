@@ -38,8 +38,8 @@ function AddInfo(props){
                     <label htmlFor={"date"}>Latest Pick-up Date</label><br/>
                     <input type="date" id="date" defaultValue={"today"}/><br/>
                     <label htmlFor={"tags"}>Tags</label>
-                    <Tag tags={tags} isActive={isActive} addTag={addTag} removeTag={removeTag}></Tag>
-                    <input type="submit"/>
+                    <Tag tags={tags} isActive={isActive} addTag={addTag} removeTag={removeTag} toggleEnabled={true}></Tag>
+                    <input type="submit"></input>
                 </form>
             </div>
         </div>)

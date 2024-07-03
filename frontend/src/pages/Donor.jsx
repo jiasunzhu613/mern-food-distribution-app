@@ -5,6 +5,7 @@ import AddPin from "../AddPin/AddPin.jsx";
 import axios from "axios";
 import PropTypes from "prop-types";
 import AddInfo from "../AddInfo/AddInfo.jsx";
+import Tag from "../Tag/Tag.jsx";
 
 function Donor(props) {
     const [showPopup, setShowPopup] = useState({});
@@ -15,6 +16,7 @@ function Donor(props) {
 
     useEffect(() => {
         loadPins();
+        //load local stoage for user login?
         }, []);
 
     function wantsToAddPin(w = false){
@@ -59,7 +61,8 @@ function Donor(props) {
         props.user !== "" ?
         <>
             {showAddInfo ?
-            <AddInfo lngLat={lngLat} addPin={addPin} setShowAddInfo={toggleAddInfo}></AddInfo> : <></>}
+            <AddInfo lngLat={lngLat} addPin={addPin} setShowAddInfo={toggleAddInfo}></AddInfo> : <></>
+            }
             <Map
                 onClick={(e) => {
                     if (wantToAddPin){
@@ -91,8 +94,11 @@ function Donor(props) {
                                                anchor={"left"}
                                                closeButton={true}
                                                onClose={() => setShowPopup(false)}>
-                                            <div>You are here</div>
-                                            <button onClick={() => deletePin(p._id)}>{p._id}</button>
+                                            <div>Latest pick-up date: {p.date}</div> <br/>
+                                            <div>Item Types:</div><br/>
+                                            <Tag tags={p.itemTypes} toggleEnabled={false}></Tag><br/>
+                                            <button>Edit Pin</button>
+                                            <button onClick={() => deletePin(p._id)}>Delete Pin</button>
                                         </Popup>
                                     )
                                 }
