@@ -25,6 +25,7 @@ function Donor(props) {
 
     function toggleAddInfo(boo = false) {
         setShowAddInfo(boo);
+        console.log("show add info " + showAddInfo)
     }
 
     // Axios requests
@@ -61,7 +62,7 @@ function Donor(props) {
         props.user !== "" ?
         <>
             {showAddInfo ?
-            <AddInfo lngLat={lngLat} addPin={addPin} setShowAddInfo={toggleAddInfo}></AddInfo> : <></>
+            <AddInfo lngLat={lngLat} addPin={addPin} toggleAddInfo={toggleAddInfo}></AddInfo> : null
             }
             <Map
                 onClick={(e) => {

@@ -4,7 +4,7 @@ import Tag from "../Tag/Tag.jsx";
 import PropTypes from "prop-types";
 
 
-const tagNames = ["Canned food", "Spilable food"]
+const tagNames = ["Canned food", "Spoilable food"]
 function AddInfo(props){
     const [tags, setTags] = useState(tagNames);
     const [activeTags, setActiveTags] = useState([]);
@@ -34,12 +34,12 @@ function AddInfo(props){
     return (
         <div className={styles.background}>
             <div className={styles.container}>
-                <form onSubmit={handleSubmit}>
+                <form>
                     <label htmlFor={"date"}>Latest Pick-up Date</label><br/>
                     <input type="date" id="date" defaultValue={"today"}/><br/>
                     <label htmlFor={"tags"}>Tags</label>
                     <Tag tags={tags} isActive={isActive} addTag={addTag} removeTag={removeTag} toggleEnabled={true}></Tag>
-                    <input type="submit"></input>
+                    <button type="button" onClick={handleSubmit}>Submit</button>
                 </form>
             </div>
         </div>)
