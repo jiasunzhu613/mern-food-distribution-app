@@ -32,8 +32,9 @@ function Login(props){
             password: pw
             })
             .then(d => {
-                if (d.data === 'success') {
-                    props.login(email);
+                if (d.data.verdict === 'success') {
+                    console.log("HI" + d.data._id)
+                    props.login(d.data._id);
                     navigate("/donor");
                 } else{
                     alert("INCORRECT EMAIL OR PASSWORD")
@@ -50,6 +51,7 @@ function Login(props){
     }
 
     return (
+        props.uid === "" ?
         <div>
             <form onSubmit={handleSubmit}>
                 <label htmlFor={"eMail"}>E-Mail</label><br/>
@@ -58,12 +60,13 @@ function Login(props){
                 <input required={true} type="text" id="pw"/><br/>
                 <input type="submit"/>
             </form>
-        </div>)
+        </div> : navigate("/donor"))
 
 }
 
 Login.prototype = {
-    login: PropTypes.func
+    login: PropTypes.func,
+    uid: PropTypes.string
 }
 
 export default Login

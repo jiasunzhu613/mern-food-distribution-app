@@ -1,11 +1,12 @@
 import React, {useState, useEffect}  from 'react';
 import Map, {Marker, Popup} from 'react-map-gl';
-import NavBar from "../NavBar/NavBar.jsx";
-import AddPin from "../AddPin/AddPin.jsx";
 import axios from "axios";
 import PropTypes from "prop-types";
+import NavBar from "../NavBar/NavBar.jsx";
+import AddPin from "../AddPin/AddPin.jsx";
 import AddInfo from "../AddInfo/AddInfo.jsx";
 import Tag from "../Tag/Tag.jsx";
+import SideMenuDonor from "../SideMenuDonor/SideMenuDonor.jsx";
 
 function Donor(props) {
     const [showPopup, setShowPopup] = useState({});
@@ -13,10 +14,12 @@ function Donor(props) {
     const [wantToAddPin, setWantToAddPin] = useState(false);
     const [showAddInfo, setShowAddInfo] = useState(false);
     const [lngLat, setLnglat] = useState([]);
+    const [activeTags, setActiveTags] = useState([]);
+    const [date, setDate] = useState("");
+    const [id, setId] = useState("");
 
     useEffect(() => {
         loadPins();
-        //load local stoage for user login?
         }, []);
 
     function wantsToAddPin(w = false){
@@ -25,7 +28,6 @@ function Donor(props) {
 
     function toggleAddInfo(boo = false) {
         setShowAddInfo(boo);
-        console.log("show add info " + showAddInfo)
     }
 
     // Axios requests
@@ -38,7 +40,7 @@ function Donor(props) {
     function addPin(lngLat, date, items){
         console.log(lngLat);
         axios.post("http://localhost:5555/event", {
-            user: props.user,
+            uid: props.uid,
             lat: lngLat.lat,
             long: lngLat.lng,
             date: date,
@@ -47,7 +49,30 @@ function Donor(props) {
                 setWantToAddPin(false);
                 loadPins();
                 console.log(res)
-            }).catch((err) => console.log(err));}
+            }).catch((err) => console.log(err));
+    }
+
+    function editPin(p){
+        setActiveTags(p.itemTypes);
+        setDate(p.date);
+        setId(p._id);
+        setShowAddInfo(true);
+    }
+
+    function updatePin(id, date, items){ //TODO: add update lng lat
+        axios.put(`http://localhost:5555/event/${id}`, {
+            date: date,
+            itemTypes: items
+            })
+            .then((res) => {
+                loadPins();
+                setActiveTags([]);
+                setDate("");
+                setId("");
+                console.log(res);
+            })
+            .catch((err) => console.log(err));
+    }
 
     function deletePin(id){
         axios.delete(`http://localhost:5555/event/${id}`)
@@ -59,35 +84,36 @@ function Donor(props) {
     }
 
     return (
-        props.user !== "" ?
+        props.uid !== "" ?
         <>
             {showAddInfo ?
-            <AddInfo lngLat={lngLat} addPin={addPin} toggleAddInfo={toggleAddInfo}></AddInfo> : null
+            <AddInfo lngLat={lngLat} addPin={addPin} updatePin={updatePin} toggleAddInfo={toggleAddInfo} activeTags={activeTags} date={date} id={id}></AddInfo> : null
             }
+
             <Map
                 onClick={(e) => {
                     if (wantToAddPin){
-                        setShowAddInfo(true);
                         setLnglat(e.lngLat);
+                        setShowAddInfo(true);
                     }
                 }}
                 mapboxAccessToken={process.env.REACT_APP_MAPBOX}
                 initialViewState={{
                     longitude: 2.294694,
                     latitude: 48.858093,
-                    zoom: 14
+                    zoom: 14 // add this into local storage
                 }}
                 style={{width: "100vw", height: "100vh", position: "fixed", top: 0, left: 0, zIndex: -1}}
                 mapStyle="mapbox://styles/mapbox/streets-v9">
 
                 {
                     pins.map((p) =>
-                            p.user === props.user ?
+                            p.uid === props.uid ?
                             <div key={p._id}>
                                 <Marker onClick={(event) => {
                                     event.originalEvent.stopPropagation(); // need this to stop propagating close event, https://stackoverflow.com/questions/68783312/show-popup-for-only-one-marker-react-map-gl
                                     setShowPopup({[p._id]: true});
-                                }} longitude={p.long} latitude={p.lat} zIndex={2}></Marker>
+                                }} longitude={p.long} latitude={p.lat} zIndex={2} style={{borderWidth: "20px"}}></Marker>
                                 {
                                     showPopup[p._id] &&
                                     (
@@ -98,7 +124,12 @@ function Donor(props) {
                                             <div>Latest pick-up date: {p.date}</div> <br/>
                                             <div>Item Types:</div><br/>
                                             <Tag tags={p.itemTypes} toggleEnabled={false}></Tag><br/>
-                                            <button>Edit Pin</button>
+                                            <button onClick={
+                                                () => {
+                                                    editPin(p);
+                                                }
+                                            }
+                                            >Edit Pin</button>
                                             <button onClick={() => deletePin(p._id)}>Delete Pin</button>
                                         </Popup>
                                     )
@@ -107,18 +138,18 @@ function Donor(props) {
                     )
                 }
             </Map>
-            <NavBar></NavBar>
+            <SideMenuDonor isDonor={true} pins={pins} editPin={editPin} deletePin={deletePin} uid={props.uid}></SideMenuDonor>
+            <NavBar isDonor={true} logout={props.logout}></NavBar>
             <AddPin wantsToAddPin={wantsToAddPin}></AddPin>
         </> :
             <div>
                 hi not logged in :(
-
             </div>
     )
 }
 
 Donor.prototype = {
-    user: PropTypes.string
+    uid: PropTypes.string
 }
 
 export default Donor;

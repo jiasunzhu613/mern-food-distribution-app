@@ -25,6 +25,10 @@ const userSchema = new Schema({
     },
     activity:{ // a set of different activities indexed using numbers (?)
         type: Number
+    },
+    accepted: {
+        type: [String],
+        validate: v => Array.isArray(v) && v.length > 0
     }
 },
 {

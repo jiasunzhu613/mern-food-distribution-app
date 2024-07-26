@@ -1,0 +1,38 @@
+.content {
+    top: 0;
+    position: fixed;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    /*justify-content: center;*/
+}
+
+.containerNoPins {
+    background-color: #fcf8ff;
+    border-radius: 20px;
+    /*float:left;*/
+    position: fixed;
+    height: 98vh;
+    width: 20vw;
+    overflow-y: scroll;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container {
+    background-color: #fcf8ff;
+    border-radius: 20px;
+    /*float:left;*/
+    position: fixed;
+    height: 98vh;
+    width: 20vw;
+    overflow-y: scroll;
+}
+
+.noPins {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}

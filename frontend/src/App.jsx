@@ -8,31 +8,32 @@ import Register from "./pages/Register.jsx";
 
 
 function App() {
-    const [user, setUser] = useState("");
+    // const [user, setUser] = useState("");
+    const [uid, setUid] = useState("");
 
     useEffect(() => {
-        if (localStorage.getItem("login") !== null){
-            setUser(localStorage.getItem("login"))
+        if (localStorage.getItem("loginUid") !== null){
+            setUid(localStorage.getItem("loginUid"))
         }
     }, [])
 
-    async function login(u = "") {
-        setUser(u)
-        localStorage.setItem("login", u)
+    async function login(uid = "") {
+        setUid(uid)
+        localStorage.setItem("loginUid", uid)
     }
 
     async function logout() {
-        setUser("")
-        localStorage.removeItem("login")
+        setUid("")
+        localStorage.removeItem("loginUid")
     }
 
 
     return (
         <Routes>
-            <Route path='/' element={<Home user={user}/>}/>
-            <Route path='/donor' element={<Donor user={user}/>}/>
-            <Route path='/recipient' element={<Recipient user={user}/>}/>
-            <Route path='/login' element={<Login login={login}/>}/>
+            <Route path='/' element={<Home uid={uid}/>}/>
+            <Route path='/donor' element={<Donor uid={uid} logout={logout}/>}/>
+            <Route path='/recipient' element={<Recipient uid={uid} logout={logout}/>}/>
+            <Route path='/login' element={<Login login={login} uid={uid}/>}/>
             <Route path='/register' element={<Register/>}/>
         </Routes>
     )

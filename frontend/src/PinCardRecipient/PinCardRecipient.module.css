@@ -1,0 +1,13 @@
+.background {
+    background-color: lightgoldenrodyellow;
+    border-radius: 20px;
+    margin: 10px 10px;
+}
+
+.container {
+    padding: 10px 10px
+}
+
+.text {
+    margin: 5px 0px;
+}

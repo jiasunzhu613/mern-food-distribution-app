@@ -1,15 +1,37 @@
 .nav {
-    position: fixed;
-    width: 100%;
+    /*position: fixed;*/
+    /*width: 100%;*/
+    float: right;
+    right: 0;
     overflow: hidden;
+    background-color: floralwhite;
+    border-radius: 20px;
+    /*display: flex;*/
+    /*justify-content: center;*/
+    /*align-items: center;*/
 }
 
-.nav a{
-    display: block;
-    padding: 14px 16px;
-    float: right;
+.openSideMenu {
+    float: left;
+    /*left: 20;*/
+    overflow: hidden;
+    background-color: floralwhite;
+    border-radius: 20px;
 }
+
+/*.container {*/
+/*    position: inherit;*/
+/*    color: black;*/
+/*    background-color: black;*/
+/*    border-radius: 20px;*/
+/*}*/
+
+/*.nav a{*/
+/*    display: block;*/
+/*    float: right;*/
+/*}*/
 
 .profileImg {
     border-radius: 100%;
+    padding: 14px 16px;
 }

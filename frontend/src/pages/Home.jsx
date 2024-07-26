@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import AddPin from "../AddPin/AddPin.jsx";
 import AddInfo from "../AddInfo/AddInfo.jsx";
 import Tag from "../Tag/Tag.jsx";
+import SideMenuDonor from "../SideMenuDonor/SideMenuDonor.jsx";
 
 const tagNames = ["Canned food", "Spoilable food"]
 const Home = (props) => {
@@ -25,11 +26,12 @@ const Home = (props) => {
 
     return (
         // <Tag tags={tags} isActive={isActive} addTag={addTag} removeTag={removeTag}></Tag>
-        <AddInfo></AddInfo>
+        // <AddInfo></AddInfo>
         // <AddPin></AddPin>
         // <div>
         //    hi {props.user}
         // </div>
+        <SideMenuDonor></SideMenuDonor>
     )
 }
 

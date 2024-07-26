@@ -24,7 +24,8 @@ router.post('/register', async (request, response) => {
             email: request.body.email,
             password: hashedPassword,
             icon: minidenticon(request.firstName + " " + request.lastName, SATURATION, LIGHTNESS),
-            activity: 1
+            activity: 1,
+            accepted: []
         };
 
         const userExists = await User.findOne({email: request.body.email})
@@ -38,7 +39,8 @@ router.post('/register', async (request, response) => {
                 firstName: user.firstName,
                 lastName: user.lastName,
                 email: user.email,
-                icon: user.icon
+                icon: user.icon,
+                accepted: []
             });
         }
     }catch (error){
@@ -60,11 +62,18 @@ router.post('/login', async (request, response) => {
         if(user && (await bcrypt.compare(request.body.password, user.password))) {
             //Login successfull
             console.log("reached1")
+            console.log(user._id)
 
-            return response.json("success");
+            return response.json({
+                    verdict: "success",
+                    _id: user._id
+                });
         }
         console.log("reached2")
-        return response.json("failed");
+        return response.json({
+            verdict: "failed",
+            _id: ""
+        });
     }catch (error){
         console.log(error.message);
         response.status(500).send({message: error.message});
@@ -103,25 +112,31 @@ router.put('/:id', async (request, response) => {
     try{
         const id = request.params.id; // getting id from the parameters
 
-        //hash pw
-        const salt = await bcrypt.genSalt(10)
-        const hashedPassword = await bcrypt.hash(request.body.password, salt)
-        console.log(hashedPassword)
-
-        //Creating update object literal
-        const update = {
-            firstName: request.body.firstName,
-            lastName: request.body.lastName,
-            email: request.body.email,
-            password: hashedPassword,
-            icon: minidenticon(request.firstName + " " + request.lastName, SATURATION, LIGHTNESS),
-            activity: request.body.activity
-        };
-
-        if (request.icon){
-            update.icon = fs.readFileSync(request.body.icon, {encoding:"base64", flag:"r"});
+        if (request.body.password !== undefined) {
+            const salt = await bcrypt.genSalt(10)
+            const hashedPassword = await bcrypt.hash(request.body.password, salt)
+            console.log(hashedPassword)
         }
-        const result = await User.findByIdAndUpdate(id, update); // uses the object literal to update the values present with the id
+        //hash pw
+        // const salt = await bcrypt.genSalt(10)
+        // const hashedPassword = await bcrypt.hash(request.body.password, salt)
+        // console.log(hashedPassword)
+        //
+        // //Creating update object literal
+        // const update = {
+        //     firstName: request.body.firstName,
+        //     lastName: request.body.lastName,
+        //     email: request.body.email,
+        //     password: await hashedPassword,
+        //     icon: minidenticon(request.firstName + " " + request.lastName, SATURATION, LIGHTNESS),
+        //     activity: request.body.activity,
+        //     accepted: request.body.accepted
+        // };
+
+        // if (request.icon){
+        //     update.icon = fs.readFileSync(request.body.icon, {encoding:"base64", flag:"r"});
+        // }
+        const result = await User.findByIdAndUpdate(id, request.body); // uses the object literal to update the values present with the id
 
         if (!result){
             return response.status(404).json({message : 'User not found'});
