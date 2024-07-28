@@ -1,4 +1,4 @@
-import React, {useState, useEffect}  from 'react';
+import React, {useState, useEffect, useCallback}  from 'react';
 import Map, {Marker, Popup} from 'react-map-gl';
 import axios from "axios";
 import PropTypes from "prop-types";
@@ -18,9 +18,18 @@ function Donor(props) {
     const [date, setDate] = useState("");
     const [id, setId] = useState("");
 
+    const loadPins = useCallback(async () => {
+        axios.get("http://localhost:5555/event")
+            .then(p => setPins(p.data.data))
+            .catch(err => console.log(err));
+    }, [])
+
     useEffect(() => {
-        loadPins();
-        }, []);
+        const loadData = async () => {
+            await loadPins();
+        };
+        loadData();
+        }, [loadPins]);
 
     function wantsToAddPin(w = false){
         setWantToAddPin(w);
@@ -31,11 +40,11 @@ function Donor(props) {
     }
 
     // Axios requests
-    function loadPins(){
-        axios.get("http://localhost:5555/event")
-            .then(p => setPins(p.data.data))
-            .catch(err => console.log(err));
-    }
+    // function loadPins(){
+    //     axios.get("http://localhost:5555/event")
+    //         .then(p => setPins(p.data.data))
+    //         .catch(err => console.log(err));
+    // }
 
     function addPin(lngLat, date, items){
         console.log(lngLat);
